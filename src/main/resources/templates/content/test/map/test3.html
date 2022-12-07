@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>학급별 학생목록</h2>
+	<th:block th:each="classInfo:${mapData}">
+		<h3 th:text="${classInfo.key}"></h3>
+		<table border="1">
+			<tr>
+				<th>아이디</th>
+				<th>이름</th>
+			</tr>
+			<tr th:each="student:${classInfo.value}">
+				<td th:text="${student.memberId}"></td>
+				<td th:text="${student.memberName}"></td>
+			</tr>
+		</table>
+
+	</th:block>
+
+</body>
+</html>

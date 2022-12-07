@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'CookieRun-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'twayair';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'GongGothicMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+	margin: 0 auto;
+	margin-top: 30px;
+	font-family: 'GongGothicMedium';
+}
+
+#top{
+	font-family: 'CookieRun-Regular';
+	font-size: 18px;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+#shop{
+	
+	margin: 0 auto;
+	font-size: 60px;
+	font-weight:bold;
+	margin-bottom: 30px;
+}
+a{
+	text-decoration: none;
+	color: black;
+}
+textarea {
+	resize: none;
+}
+
+
+.banner{
+	background-color: rgba( 255, 255, 255, 0.5 );
+	position: absolute;
+	z-index: 10px;   /* 다른 그림에 대비하여 앞으로 나와보이는 효과를 주는 기능, position: absolute와 같이 사용한다. */
+	width: 8rem;
+	height: 16rem;
+	top: 10rem; /* 위치 설정 */
+	right: 1rem;  /* 위치 설정 오른쪽에서 1rem 만큼 */
+}
+.no-stop{
+	padding: 0 10px;
+}
+.no-stop li{
+	width: 50px;
+	height: 30px;
+	background-color: pink;
+	margin-bottom: 10px;
+}

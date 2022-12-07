@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div layout:fragment ="content">
+
+<th:block layout:fragment ="css">
+	<link rel ="stylesheet" th:href="@{/css/cartList.css}">
+</th:block>
+
+
+	<div class="row justify-content-center mt-4">
+	
+	<div class="col-11">
+
+	 <table class="table align-middle">
+      <colgroup>
+         <col width="5%">
+         <col width="5%">
+         <col width="15%">
+         <col width="30%">
+         <col width="15%">
+         <col width="15%">
+         <col width="15%">
+      </colgroup>
+      <thead>
+         <tr>
+            <td><input type="checkbox" id="checkAll"></td>
+            <td>No</td>
+            <td colspan="2">상품 정보</td>
+            <td>수량</td>
+            <td>가격</td>
+            <td>등록일</td>
+         </tr>
+      </thead>
+      <tbody>
+       <th:block th:each="cart, status : ${cartList}">
+		     <tr>
+		      	<td><input type="checkbox" class="chk" th:value="${cart.cartCode}" th:data-item-code="${cart.itemList.itemCode}" checked></td>
+		      	<td>
+		      		<span th:text="${#lists.size(cartList) - status.index}"></span>
+		      	
+		      	</td>  <!-- 전체개수 - index -->
+		      	<td> <img th:src="|@{/image/}${cart.itemList.imgList[0].attachedName}|" width="100px" height="100px"></td>
+		      	<td>
+		      		[<span th:text="${cart.itemList.cateInfo.cateName}"></span>]
+		      		 <span th:text="${cart.itemList.itemName}"></span> 
+		      	</td>
+		      	<td>
+			      	<div class="input-group mb-3">
+					  <input type="text" class="form-control amountInput" aria-describedby="button-addon2" th:value="${cart.cartAmount}" th:data-origin-amount="${cart.cartAmount}">
+					  <button class="btn btn-outline-primary" type="submit" id="button-addon2" th:onclick="updateCnt(this);">변경</button>
+					</div>
+			      	
+		      	</td>
+		      	<td>
+					[[${cart.itemList.itemPrice}]] * [[${cart.cartAmount}]]		      	
+		      	  <div class="totalPriceDiv" th:data-total-price ="${cart.totalPrice}">
+		      	   	[[${#numbers.formatCurrency(cart.totalPrice)}]]
+		      	  </div>
+		      	</td>
+		      	<td th:text="${cart.regDate}"></td>
+		      
+		     </tr>
+	    </th:block>
+      </tbody>
+      
+      
+      
+     </table>
+     
+     <div class="row mt-4" >
+      <div class="col mb-3">
+         <div class="row" style="margin-right: 10px;">
+            <div class="offset-9 col-1 text-center" style=" height: 2.5rem; font-size: 1.2rem; padding-top: 0.2rem; border-bottom: 1.5px solid; color: block;">
+             TotalPrice   
+            </div>
+            <div class="col-2 text-end" style="border-bottom: 1.5px solid; padding-top: 0.2rem; height: 2.5rem; font-size: 1.1rem;">
+               <span th:text="${#numbers.formatCurrency(finalPrice)}" id="finalPriceSpan"></span>
+            </div>
+         </div>
+     </div>
+     </div>
+     
+    
+     <div class="row mt-3 mb-4" style="margin-left: 720px;">
+     	
+    	 <div class="col" > 
+    	 <form action="" method="post" id="cartForm">
+    	 	<input type="hidden" name="cartCodes" value="">
+    	 </form>
+    	 	<button type="button" class="btn btn-outline-dark" th:onclick="deleteBuy(this);"> 
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-heart" viewBox="0 0 16 16">
+  			<path d="M8 7.982C9.664 6.309 13.825 9.236 8 13 2.175 9.236 6.336 6.31 8 7.982Z"/>
+ 			<path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5Zm0 1H7.5v3h-6l2.25-3ZM8.5 4V1h3.75l2.25 3h-6ZM15 5v10H1V5h14Z"/>
+			</svg>선택삭제</button>
+		</div>
+		
+    	 <div class="col">
+    	 	<button type="button" class="btn btn-outline-dark" th:onclick="deleteBuy(this);"> 
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-heart" viewBox="0 0 16 16">
+  			<path d="M8 7.982C9.664 6.309 13.825 9.236 8 13 2.175 9.236 6.336 6.31 8 7.982Z"/>
+ 			<path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5Zm0 1H7.5v3h-6l2.25-3ZM8.5 4V1h3.75l2.25 3h-6ZM15 5v10H1V5h14Z"/>
+			</svg>선택구매</button>
+		</div>
+     </div>
+     
+     </div>
+     </div>
+  
+     
+<!--  상품 수량 변경 시 모달창  -->
+<div class="modal fade" id="changeAmountModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      	<div class="row mb-3" >
+	      	<div class="col text-center">
+	      	  수량을 변경하시겠습니까?
+	      	</div>
+      	</div>
+      	
+       <div class="row">
+       	<div class="col text-center">
+       		<button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;"
+       		th:onclick="changeCnt();" data-cart-code="" data-cart-amount="" id="updateAmountBtn">확인</button>
+       
+       		<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" th:onclick="rollbackAmount();"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;" data-origin-amount="" id="cancelBtn">취소</button>
+       	</div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>		
+		
+<!--  상품 수량 변경 후 모달창  -->
+<div class="modal fade" id="updateCntModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      	<div class="row mb-3" >
+	      	<div class="col text-center">
+	      	  수량이 변경되었습니다.
+	      	</div>
+      	</div>
+      	
+       <div class="row">
+       	<div class="col text-center">
+       		<button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;">확인</button>
+       	</div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>			
+    
+	<script type="text/javascript" th:src="@{/js/cart/cart_list.js}"></script>
+</div>
+
+
+</body>
+</html>

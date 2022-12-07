@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<th:block sec:authorize="isAnonymous()">
+	
+	<script type="text/javascript">
+		alert('로그인 실패');
+		location.href = '/item/list?isLoginFail=true';
+	</script>
+
+</th:block>
+
+<th:block sec:authorize="isAuthenticated()">
+	<div sec:authorize="hasRole('ROLE_MEMBER')">	<!-- sec가 if역할을 함 -->
+		<script type="text/javascript">
+			alert('환영합니다.');
+			location.href = '/item/list';
+		</script>
+	</div>
+	
+	<!-- 관리자 페이지  -->
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<script type="text/javascript">
+			alert('관리자님 환영합니다');
+			location.href = '/admin/main';
+		</script>
+	</div>
+	
+
+</th:block> 
+
+
+</body>
+</html>

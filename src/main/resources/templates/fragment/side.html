@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultrap.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div th:fragment="side">
+ <div class="container">
+	
+ <div class="list-group" style="font-size: 20px;">
+	<div sec:authorize="hasRole('ROLE_MEMBER')">
+	  <button type="button" class="list-group-item list-group-item-action" 
+	   th:classappend="${menu} eq '1' ? 'active'"
+	   th:onclick="|location.href='@{/cart/cartList(menu=1)}'|">장바구니 목록</button>
+	  
+	  <button type="button" class="list-group-item list-group-item-action" 
+	  th:onclick="|location.href='@{/member/myPage(menu=2)}'|"
+	  th:classappend="${menu} eq '2' ? 'active'">내 정보수정 </button>
+	  
+	  <button type="button" class="list-group-item list-group-item-action"
+	  th:onclick="|location.href='@{/buy/buyHistory(menu=3)}'|"
+	  th:classappend="${menu} eq '3' ? 'active'">구매내역조회 </button>
+	</div>
+	
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+	  <button type="button" class="list-group-item list-group-item-action" 
+	  th:classappend="${menu} eq '1' ? 'active'"
+	  th:onclick="|location.href='@{/admin/main(menu=1)}'|">상품등록</button>
+	  <!-- 또는 a태그에서는 th:href="@{/admin/main}" -->
+	  
+	  <button type="button" class="list-group-item list-group-item-action"
+	  th:onclick="|location.href='@{/item/itemList(menu=2)}'|" 
+	  th:classappend="${menu} eq '2' ? 'active'">상품관리 </button>
+	  
+	  
+	  <button type="button" class="list-group-item list-group-item-action" 
+	  th:onclick="|location.href ='@{/admin/memberList(menu=3)}'|"
+	  th:classappend="${menu} eq '3' ? 'active'">	회원권한설정 </button>
+	  
+	  <button type="button" class="list-group-item list-group-item-action">메뉴관리</button>
+	</div>
+  </div>
+</div>
+ 
+</div>
+</body>
+</html>

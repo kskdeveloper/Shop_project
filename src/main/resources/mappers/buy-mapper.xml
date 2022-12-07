@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="buyMapper">
+
+<resultMap type="kh.study.shop.buy.vo.BuyVO" id="buy">
+<id column="BUY_CODE" property="buyCode"/>
+<result column="MEMBER_ID" property="memberId"/>
+<result column="BUY_DATE" property="buyDate"/>
+<result column="TOTAL_PRICE" property="totalPrice"/>
+<result column="BUY_CNT" property="buyCnt"/>
+
+<collection property="buyDetailList" resultMap="buyDetail"/>
+
+</resultMap>
+
+<resultMap type="kh.study.shop.buy.vo.BuyDetailVO" id="buyDetail">
+<id column="BUY_DETAIL_CODE" property="buyDetailCode"/>
+<result column="ITEM_CODE" property="itemCode"/>
+<result column="BUY_CODE" property="buyCode"/>
+<result column="BUY_AMOUNT" property="buyAmount"/>
+<result column="BUY_PRICE" property="buyPrice"/>
+
+<association property="itemInfo" resultMap="itemMapper.item"/>
+
+</resultMap>
+
+
+<!-- 선택상품 주문하기 -->
+<insert id="cartBuy">
+	INSERT INTO SHOP_BUY(
+			BUY_CODE
+		  , MEMBER_ID
+		  , TOTAL_PRICE
+			)VALUES(
+		   #{buyCode}
+		 , #{memberId}
+		 , #{totalPrice} 
+	)
+</insert>
+
+<!-- buy_detail -->
+<insert id="cartBuyDetail">
+	INSERT INTO SHOP_BUY_DETAIL (
+		  BUY_DETAIL_CODE
+		, ITEM_CODE
+		, BUY_CODE
+		, BUY_AMOUNT
+	)
+	
+	<foreach collection="buyDetailList" item="BuyDetailVO" separator="UNION ALL" index="status">
+		SELECT #{buyCode}||'_'||LPAD(#{status} + 1, 2, 0)
+			 , #{BuyDetailVO.itemCode}
+			 , #{buyCode}	
+			 , #{BuyDetailVO.buyAmount} 
+		FROM DUAL
+	</foreach>
+
+</insert>
+
+<!-- CART_CODE가 cart_001, cart_002인 장바구니 데이터의 조회 -->
+<select id="cartBuyInfo" resultMap="cartMapper.cart">
+SELECT ITEM_CODE, CART_AMOUNT, TOTAL_PRICE
+FROM SHOP_CART
+WHERE CART_CODE IN
+<foreach collection="cartCodeList" item="cartCode" open="(" close=")" separator=",">
+#{cartCode}
+</foreach>
+
+</select>
+
+<!-- 다음에 들어갈 buyCode -->
+<select id="buyCode" resultType="String">
+	SELECT 'BUY_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BUY_CODE, 5))), 0) +1, 3, 0)
+	FROM SHOP_BUY
+</select>
+
+
+<!-- 구매내역 조회 -->
+<select id="buyList" resultMap="buy">
+<!-- SELECT BUY_AMOUNT
+	 , BUY_DATE
+	 , B.BUY_CODE
+	 , TOTAL_PRICE
+	 , (SELECT COUNT(BUY_DETAIL_CODE) 
+	 	FROM SHOP_BUY_DETAIL 
+	 	WHERE BUY_CODE = B.BUY_CODE)AS BUY_CNT
+FROM SHOP_BUY B, SHOP_BUY_DETAIL D
+WHERE B.BUY_CODE = D.BUY_CODE
+AND MEMBER_ID = #{memberId}
+ORDER BY BUY_DATE DESC -->
+
+	SELECT 
+		  BUY_DATE
+		 , B.BUY_CODE
+		 , TOTAL_PRICE
+		 , (SELECT COUNT(BUY_DETAIL_CODE) 
+		 	FROM SHOP_BUY_DETAIL 
+		 	WHERE BUY_CODE = B.BUY_CODE)AS BUY_CNT
+	FROM SHOP_BUY B
+	WHERE MEMBER_ID = #{memberId}
+	ORDER BY BUY_DATE DESC
+</select>
+
+<!-- 구매내역 상세 리스트 -->
+<select id="buyHistory" resultMap="buyDetail">
+	SELECT S.ITEM_CODE
+		  , CATE_NAME
+		  , ITEM_NAME
+		  , ITEM_PRICE
+		  , BUY_AMOUNT
+		  , ATTACHED_NAME
+		  , (ITEM_PRICE * BUY_AMOUNT) AS BUY_PRICE
+		  , B.BUY_CODE
+	FROM SHOP_ITEM S, ITEM_CATEGORY C, ITEM_IMG G,  SHOP_BUY_DETAIL D, SHOP_BUY B
+	WHERE S.ITEM_CODE = G.ITEM_CODE
+	AND S.ITEM_CODE = D.ITEM_CODE
+	AND C.CATE_CODE = S.CATE_CODE
+	AND B.BUY_CODE = D.BUY_CODE
+	AND MEMBER_ID = #{memberId}
+	AND IS_MAIN = 'Y'
+	ORDER BY BUY_DATE DESC
+</select>
+
+
+<!-- 위 두개의 쿼리를 하나로 작성했을 때 기준
+ SELECT  B.BUY_CODE
+ 		, (SELECT ITEM_PRICE FROM SHOP_ITEM
+ 		   WHERE ITEM_CODE = D.ITEM_CODE)AS ITEM_PRICE
+ 		, TOTAL_PRICE
+ 		, BUY_DATE
+ 		, BUY_AMOUNT
+ 		, (SELECT ITEM_NAME FROM SHOP_ITEM 
+ 		   WHERE ITEM_CODE = D.ITEM_CODE)AS ITEM_NAME 
+ 		, (SELECT COUNT(BUY_DETAIL_CODE) 
+		 	FROM SHOP_BUY_DETAIL 
+		 	WHERE BUY_CODE = B.BUY_CODE)AS BUY_CNT
+		, (SELECT ITEM_PRICE FROM SHOP_ITEM
+ 		   WHERE ITEM_CODE = D.ITEM_CODE)*BUY_AMOUNT AS BUY_PRICE
+ 		, (SELECT CATE_NAME FROM ITEM_CATEGORY WHERE CATE_CODE 
+ 			= (SELECT CATE_CODE FROM SHOP_ITEM 
+ 			WHERE ITEM_CODE = D.ITEM_CODE)AS CATE_NAME
+ 		, (SELECT ATTACHED_NAME FROM ITEM_IMG 
+ 		   WHERE ITEM_CODE = D.ITEM_CODE AND IS_MAIN = 'Y')   
+ FROM SHOP_BUY B, SHOP_BUY_DETAIL D
+ WHERE MEMBER_ID = #{memberId}
+ AND B.BUY_CODE = D.BUY_CODE
+ ORDER BY BUY_DATE DESC
+ 
+ -->
+</mapper>

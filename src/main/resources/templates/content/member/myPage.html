@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div layout:fragment ="content">
+<th:block layout:fragment ="css">
+	<link rel ="stylesheet" th:href="@{/css/cartList.css}">
+</th:block>
+
+		<div class="row justify-content-center mt-4">
+			<div class="col-11">
+			<h4>회원정보</h4>
+				<table class="table mt-4" style="text-align: left;">
+					<colgroup>
+						<col width="10%">
+						<col width="90%">
+					</colgroup>
+
+					<tbody id="detail">
+						<tr>
+							<th>회원ID</th>
+							<td th:text="${member.memberId}"></td>
+						</tr>
+						<tr>
+							<th>회원이름</th>
+							<td th:text="${member.memberName}"></td>
+						</tr>
+						<tr>
+							<th>주소</th>
+							<td th:text="${member.memberAddr}"></td>
+						</tr>
+						<tr>
+							<th>연락처</th>
+							<td th:text="${member.memberEmail}"></td>
+						</tr>
+
+					</tbody>
+				</table>
+
+			</div>
+			
+			<div class="row mt-4" style="text-align: center;">
+				<div class="col">
+					<button type="button" class="btn btn-outline-info">수정하기</button>
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+
+
+</body>
+</html>

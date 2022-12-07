@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+	<style>
+		#scrollTest{
+			/* overflow: scroll; */ /* 스크롤 생김 상하만 하고 싶을땐 overflow-y 좌우면 overflow-x*/
+			overflow-y: scroll; 
+			}
+			 ::-webkit-scrollbar {
+       		 width: 10px;
+      		 }
+       
+		      ::-webkit-scrollbar-track {
+		        background: #eeeeee;
+		        border-radius: 5px;
+		      }
+		       
+		      ::-webkit-scrollbar-thumb {
+		        /* background: linear-gradient(#c2e59c, #64b3f4); */
+		        background: #dcdcdc;
+		        /* background: #0d6efd; */
+		        border-radius: 5px;
+		      }   
+	</style>
+
+		<div class="row">
+			<div class="col-5 ms-4">
+				<div class="row g-3">
+					<div class="col-12 mb-3">
+						<h5>회원목록</h5>
+					</div>
+						<!-- 제목은 고정 아래에는 스크롤 달고 싶다면 테이블을 두개 만들어서 적용시킨다 -->
+					<div class="col-12 mb-3">
+						<div class="row" >
+							<div class="col-12 mb-3">
+								<div>
+									<div class="col-12 mb-3">
+										<!-- 테이블 제목 부분  -->
+										<table class="table" style="margin-bottom: -1rem;">
+											<thead>
+												<tr>
+													<th scope="col">No.</th>
+													<th scope="col">회원ID</th>
+													<th scope="col">이름</th>
+													<th scope="col">권한</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+								<div class="row" style="height: 250px; overflow-y: scroll;">
+									<div class="col-12 mb-3" >
+
+										<table class="table table-striped table-hover text-center">
+										
+											<colgroup>
+											<col width="10%">
+											<col width="40%">
+											<col width="20%">
+											<col width="30%">
+											</colgroup>
+											<tbody>
+												<th:block th:if="${#lists.size(memberList) == 0}">
+													<tr>
+														<td colspan="4">회원이 없습니다.</td>
+													</tr>
+												</th:block>
+
+												<th:block th:unless="${#lists.size(memberList) == 0}">
+													<tr th:each="member, status : ${memberList}">
+														<th th:text="${status.count}"></th>
+														<!-- memberStat.cont와 동일함 -->
+														<td th:text="${member.memberId}"></td>
+														<td><span th:text="${member.memberName}"
+															th:onclick="memberDetail([[${member.memberId}]]);"></span>
+														</td>
+														<td th:text="${member.memberRole}"></td>
+													</tr>
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-5 ms-4">
+				<div class="row g-3">
+					<div class="col-12 mb-3">
+					<h5>회원상세</h5>
+					</div>
+					<div class="col-12 mb-3">
+					<table class="table">
+					  <colgroup>
+					  <col width="25%">
+					  <col width="75%">
+					  </colgroup>
+					  
+					  <tbody id="detail">
+					    
+					  </tbody>
+					</table>
+										
+				</div>
+			</div>
+
+		</div>
+
+
+
+	
+	<script type="text/javascript" th:src="@{/js/admin/mem_manage.js}"></script>
+	
+	</div>
+	</div>
+
+
+</body>
+</html>

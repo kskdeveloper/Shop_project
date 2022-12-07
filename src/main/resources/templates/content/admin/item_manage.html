@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div layout:fragment ="content">
+	<style>
+      .table .searchTitle{
+         background-color: #e9ecef;
+      }
+      .test td{
+         padding-top: 1px;
+         padding-bottom: 1px;
+      }
+   </style>
+
+   <div class="row mb-3">
+      <div class="col">
+      <form th:action="@{/item/itemList}" method="post">
+      
+         <table class="table align-middle table-bordered text-center test"><!-- table-borderless -->
+            <colgroup>
+               <col width="8%">
+               <col width="8%">
+               <col width="15%">
+               <col width="8%">
+               <col width="19%">
+               <col width="8%">
+               <col width="8%"><!-- 재고 -->
+               <col width="18%">
+               <col width="8%">
+            </colgroup>
+            <tr>
+               <td rowspan="2">
+                  <div class="row">
+                     <div class="col-12">
+                        검 색
+                     </div>
+                     <div class="col-12">
+                        조 건
+                     </div>
+                  </div>
+               </td>
+               <td class="searchTitle">카테고리</td>
+               <td>
+                  <select class="form-select" name="cateCode">
+                  	<option value="" th:selected="${paramMap['cateCode'] == null or paramMap['cateCode'] eq ''}">전체</option>
+                     <th:block th:each="cateList: ${cateList}">
+                     	<option th:text="${cateList.cateName}" th:value="${cateList.cateCode}" th:selected="${paramMap['cateCode'] eq cateList.cateCode}"></option>
+                     </th:block>
+                  </select>
+               </td>
+               <td class="searchTitle">상품명</td> 
+               
+               <td colspan="2">
+                  <input class="form-control" type="text" name="itemName" id="" th:value="${paramMap['itemName']}">
+               </td>
+               <td class="searchTitle">재고</td>
+               <td>
+                  <input class="form-control" type="text" name="itemStock" id="" th:value="${paramMap['itemStock']}">
+               </td>
+               <td rowspan="2">
+                  <button class="btn btn-primary" style="height: 90px;" type="submit">Search</button>
+               </td>
+            </tr>
+            <tr>
+               <td class="searchTitle">등록일</td>
+               <td colspan="3">
+                  <div class="row">
+                     <div class="col-6">
+                        <input class="form-control" type="date" name="fromDate" id="" th:value="${paramMap['fromDate']}" >
+                     </div>
+                     <div class="col-6">
+                        <input class="form-control" type="date" name="toDate" id="" th:value="${paramMap['toDate']}" >
+                     </div>
+                  </div>
+               </td>
+               <td class="searchTitle">상태</td>
+               <td colspan="2">
+                  <div class="form-check form-check-inline">			<!-- null값이거나 빈값이거나 -->
+                    <input class="form-check-input" type="radio" name="itemStatus" id="" value="" th:checked="${paramMap['itemStatus'] == null or paramMap['itemStatus'] eq ''}">
+                    <label class="form-check-label" for="" >전체</label>
+                  </div>
+                     <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="itemStatus" id="" value="ON_SALE" th:checked="${paramMap['itemStatus'] eq 'ON_SALE'}">
+                    <label class="form-check-label" for="">판매중</label>
+                  </div>
+                     <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="itemStatus" id="" value="SOLD_OUT" th:checked="${paramMap['itemStatus'] eq 'SOLD_OUT'}" >
+                    <label class="form-check-label" for="">매진</label>
+                  </div>
+               </td>
+            </tr>
+         </table>
+      </form>
+      </div>
+       <div class="row" style="margin-top: 2rem;">
+       <div class="col" style="font: 10px;">
+       	<div>총 <span th:text="${#lists.size(itemList)}"></span>개의 상품이 검색되었습니다. </div>
+       </div>
+       
+       </div>
+      
+   </div>
+
+<div class="row">
+<div class="col">
+
+	<table class="table table striped align-middle">
+	<colgroup>
+	<col width="10%">
+	<col width="10%">
+	<col width="15%">
+	<col width="10%">
+	<col width="20%">
+	<col width="15%">
+	<col width="20%">
+	
+	</colgroup>
+	
+	
+  <thead style="font-size: 1.1rem;">
+    <tr>
+      <th scope="col">No.</th>
+      <th scope="col">카테고리</th>
+      <th scope="col">상품명</th>
+      <th scope="col">가격</th>
+      <th scope="col">재고</th>
+      <th scope="col">등록일</th>
+      <th scope="col">상태</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="item, status : ${itemList}">
+      <th th:text="${status.count}"></th>
+      <td th:text="${item.cateInfo.getCateName()}"></td>
+      <td th:text="${item.itemName}"></td>
+      <td th:text="${item.itemPrice}"></td>
+      <td>
+      
+      <!-- this를 사용해서 구현하기 -->
+		<div class="row">
+			<div class="input-group mb-3">
+			  <input type="text" class="form-control stockInput" aria-describedby="button-addon2" th:value="${item.itemStock}">
+			  <button class="btn btn-outline-secondary" type="submit" id="button-addon2"
+			  th:onclick="updateStock([[${item.itemCode}]], this);">변경</button>
+	  		</div>
+		</div>
+      
+      </td>
+      <td th:text="${item.regDate}"></td>
+      <td>
+      
+      <input type="radio" th:name="|itemStatus_${status.count}|" th:checked="${item.itemStatus eq 'ON_SALE'}" 
+      value="ON_SALE" th:onclick="changeItemStatus([[${item.itemCode}]], 'ON_SALE');">판매중
+      <input type="radio" th:name="|itemStatus_${status.count}|"  th:checked="${item.itemStatus eq 'SOLD_OUT'}"
+       value="SOLD_OUT" th:onclick="changeItemStatus([[${item.itemCode}]], 'SOLD_OUT');">매진
+     
+      </td>
+    </tr>
+   
+  </tbody>
+</table>
+	
+
+</div>
+</div>
+
+<!-- 수량변경 시 모달창  -->
+<div class="modal fade" id="updateStockModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      	<div class="row mb-3" >
+	      	<div class="col text-center">
+	      	  수량이 변경되었습니다.
+	      	</div>
+      	</div>
+     
+       <div class="row">
+       	<div class="col text-end">
+       		<button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;">확인</button>
+       	</div>
+       </div>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+ <script type="text/javascript" th:src="@{/js/admin/item_manage.js}"></script> <!-- fragment 끝나기 전에 넣기 -->
+	
+</div>
+
+
+</body>
+</html>

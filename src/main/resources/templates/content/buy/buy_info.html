@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/base_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div layout:fragment ="content">
+<th:block layout:fragment ="css">
+	<link rel ="stylesheet" th:href="@{/css/cartList.css}">
+</th:block>
+
+	<div class="row justify-content-center mt-3">
+	<div class="col-10 mb-5">
+	<h4>구매 상품 정보</h4>
+
+	 <table class="table align-middle">
+      <colgroup>
+         <col width="10%">
+         <col width="30%">
+         <col width="30%">
+         <col width="15%">
+         <col width="15%">
+      </colgroup>
+      
+      <thead>
+         <tr>
+            <td>No</td>
+            <td colspan="2">상품정보</td>
+            <td>수량</td>
+            <td>가격</td>
+         </tr>
+      </thead>
+      <tbody>
+      <!-- 단일상품 구매하기  -->
+       <th:block th:if="${#lists.isEmpty(cartInfo)}">
+       	<tr>
+       		<td>1</td>
+       		<td><img th:src="|@{/image/}${item.imgList[0].attachedName}|" width="100px" height="100px"></td>
+       		<td th:text="${item.itemName}"></td>
+       		<td th:text="${buyAmount}"></td>
+       		<td th:text="${#numbers.formatCurrency(item.itemPrice)}"></td>
+       	</tr>
+       </th:block>
+      <!-- 장바구니에서 구매하기 -->
+       <th:block th:unless="${#lists.isEmpty(cartInfo)}">
+		     <tr th:each="cart, status :${cartInfo}">
+		      	<td th:text="${#lists.size(cartInfo) - status.index}"></td>
+		      	<td><img th:src="|@{/image/}${cart.itemList.imgList[0].attachedName}|" width="100px" height="100px"></td> 
+		      	<td th:text="${cart.itemList.itemName}"></td>
+		      	<td th:text="${cart.cartAmount}"></td>
+		      	<td th:text="${#numbers.formatCurrency(cart.itemList.itemPrice)}"></td>
+		     </tr>
+       </th:block>
+      </tbody>
+     </table>
+
+     
+     <div class="row mt-4" >
+      <div class="col-12 mb-3">
+         <div class="row">
+            <div class="offset-9 col-1 text-center" style=" height: 2.5rem; font-size: 1.3rem; padding-top: 0.2rem; border-bottom: 1.5px solid; color: block;">
+               총 가격
+            </div>
+            <div class="col-2 text-end" style="border-bottom: 1.5px solid; padding-top: 0.2rem; height: 2.5rem; font-size: 1.2rem;">
+               <span th:text="${#numbers.formatCurrency(totalPrice)}" th:data-total-price="${totalPrice}"> </span>
+            </div>
+         </div>
+     </div>
+     </div>
+     
+     
+	<div class="row justify-content-center mt-4">
+		<h4>주문자 정보</h4>
+	<div class="col-12 mt-4">
+<table class="table" style="text-align: left;">
+	<colgroup>
+		<col width="10%">
+		<col width="90%">
+	</colgroup>
+						  
+	<tbody id="detail">
+		<tr>
+			<th>회원ID</th>
+			<td th:text="${memberInfo.memberId}"></td>
+		 </tr>
+		<tr>
+	    	<th>회원이름</th> 
+		    <td th:text="${memberInfo.memberName}"></td>
+		</tr>
+		<tr> 
+		    <th>주소</th> 
+		     <td th:text="${memberInfo.memberAddr}"></td> 
+		</tr> 
+		<tr>
+	    	<th>연락처</th> 
+	    	<td th:text="${memberInfo.memberEmail}"></td>
+		</tr>
+				    
+	</tbody>
+</table>
+
+     <div class="row mt-4 mb-4" style="text-align: center;">
+
+    	 <div class="col-12">
+    	<!--  <form th:action="@{/buy/buyCart}" method="post"> -->
+    	<form th:attr="action=${#lists.isEmpty(cartInfo) ? '/buy/directBuy' : '/buy/buyCart'}" method="post" >
+    	 
+    	 <!-- 체크박스가 없기 때문에 아래와 같이 사용 가능 -->
+    	<th:block th:unless="${#lists.isEmpty(cartInfo)}">
+    		<th:block th:each="cart : ${cartInfo}">
+   	 		 	<input type="hidden" name="cartCodes" th:value="${cart.cartCode}">
+    	 	</th:block>
+    	</th:block>
+	    	
+	     <!-- 상세페이지에서 구매하기 -> 구매확정 -->
+	    <th:block th:if="${#lists.isEmpty(cartInfo)}">
+	    	<input type="hidden" name="itemCode" th:value="${item.itemCode}">
+	    	<input type="hidden" name="buyAmount" th:value="${buyAmount}">
+	    	<input type="hidden" name="totalPrice" th:value="${totalPrice}">
+	    </th:block>
+	    	 
+    	 	<button type="submit" class="btn btn-outline-dark" id="finalBuyBtn" >
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-heart" viewBox="0 0 16 16">
+  			<path d="M8 7.982C9.664 6.309 13.825 9.236 8 13 2.175 9.236 6.336 6.31 8 7.982Z"/>
+ 			<path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5Zm0 1H7.5v3h-6l2.25-3ZM8.5 4V1h3.75l2.25 3h-6ZM15 5v10H1V5h14Z"/>
+			</svg> 구매확정 </button>
+    	 </form>
+		</div>
+     </div>
+     
+     </div>
+     </div>
+
+</div>
+</div>
+</div>
+
+
+</body>
+</html>
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"
+	layout:decorate="layout/base_layout">
+	<!-- 이 파일과 함께 보여질 것 layout:decorate  -->
+	<!-- 두번째 줄 th:layout   -->
+
+<div layout:fragment="content">
+
+	<th:block th:unless ="${cookie_imgName.size eq 0}">
+		<div class="banner">
+			<span> 오늘 본 상품</span>
+			<div>
+				<th:block th:each="img:${cookie_imgName}">
+					<img th:src="|@{/image/}${img}|" width="100%;" >
+				</th:block>
+			</div>
+		</div>
+	</th:block>
+	
+<!-- 	<ul class="no-stop">
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul> - -->
+	
+	<div class="row mt-3">
+	  <th:block th:each="item : ${itemList}">
+		 <div class="col-3 mb-4">
+		 	<div class="card" style="width: 18rem;">
+		 	
+		 	<!-- img th:src="@{'/image/' + ${img}}" -->
+		 	<!-- img th:src= "@{/image/} + ${img} -->
+		 	<!-- img th:src= "|@{/image/} ${img}| -->
+		 	
+			  <img th:src="|@{/image/}${item.imgList[0].attachedName}|" class="card-img-top" width="280px" height="380px">
+			  <div class="card-body">
+			    <h5 class="card-title" >
+			     <a th:text="${item.itemName}" th:href="@{/item/itemDetail(itemCode=${item.itemCode})}"></a>
+			    </h5>
+			    <!-- 화폐 ${#numbers.formatCurrency(num)} -->
+			    <p class="card-text"><span th:text="${#numbers.formatCurrency(item.itemPrice)}"></span> won </p>
+			  </div>
+			</div>
+		 </div>
+	  </th:block>
+	</div>
+	
+	<script type="text/javascript">
+
+	
+		//애니메이션 연습
+		$('.no-stop li').hover(function(){
+			$(this).stop().animate({width:'300px'}, 500);	 /* 마우스 올리면 너비 300px로 바꾸겟다 0.5초 동안 (1,000이 1초 의미) */
+		}, function(){										/* stop을 넣으면 마우스 왔다 갔다 하더라도 현재 마우스 위치부분 외에는 애니메이션 실행x */
+			$(this).stop().animate({width:'50px'}, 500);	/* 마우스 내리면 너비를 50으로 바꾸겠다(기본 너비) */
+		});
+	
+		//오늘 본 상품 스크롤에 따른 위치 변화 애니메이션
+		const bannerTag = document.querySelector('.banner');
+		//선택한 태그의 디자인 정보를 가져 온다. (style에 클래스로 빼서 사용하였기에 아래와 같이 작성하여 정보 가져온다.)
+		const bannerStyle = window.getComputedStyle(bannerTag);
+		// top:10rem; 을 px 바꿨을 때 값
+		let bannerTop = bannerStyle.getPropertyValue('top');	//160px 
+		
+		//숫자로 만들어 줘야 한다 (px제외)
+		bannerTop = parseInt(bannerTop.substr(0, bannerTop.length - 2));
+		
+		
+		//페이지에서 스크롤 변화가 일어나면 자동으로 실행되는 구문
+		$(window).scroll(function(){
+			//현재 스크롤바의 상단 좌표
+			let currentTop = $(window).scrollTop();
+			
+			console.log(currentTop);
+			
+			//오늘 본 상품 div의 상단위치 = 현재 스크롤 바 위치 (0(최초 실행 시)) + div의 상단위치 (160px) 숫자로 만들어 줘야 함!
+			//변경 되어야 하는 div의 상단 위치 좌표
+			let newPostion = currentTop + bannerTop + 'px';
+			
+			$('.banner').stop().animate({top:newPostion}, 500);
+		});
+		
+	</script>
+	
+</div>
+
+</html>

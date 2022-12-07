@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+	<div class="row justify-content-center mt-4">
+
+		<div class="col-11 mb-5">
+		<h4>구매내역 조회</h4>
+		
+		<th:block th:if="${#lists.size(buyList) == 0}">
+			<div class="row mt-4">
+			<div class="col mt-4 text-center">
+			주문 내역이 없습니다.
+			</div>
+			</div>
+		</th:block>
+		
+	<th:block th:each=" list : ${buyList}">
+		<div class="accordion" id="accordionPanelsStayOpenExample">
+		  <div class="accordion-item">
+		    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+		      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="|#panelsStayOpen-collapseOne_${listStat.count}|" 
+		      aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+		    	<span th:text="${#lists.size(buyList) - listStat.index}" 
+		    	style="width: 2rem; font-size: 1.2rem; font-weight: bold; font-style:italic; display: inline-block;"></span> 
+		      	 <span style="margin-left: 2rem;">
+		      	 <span th:text="${list.buyDate}" style="font-weight: bold; font-size: 1.1rem; display: inline-block;"></span>   
+		      	 총 <span th:text="${list.buyCnt}" style="font-weight: bold; font-size: 1.1rem; display: inline-block;"></span>건 주문
+		      	<span th:text="${#numbers.formatCurrency(list.totalPrice)}" style="font-weight: bold; font-size: 1.1rem; display: inline-block;"></span>이 결제되었습니다.
+		      	 </span>
+		      </button>
+		    </h2>
+		    <div th:id="|panelsStayOpen-collapseOne_${listStat.count}|" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+		      <div class="accordion-body">
+		        <strong>구매목록</strong> 
+		        
+		        <table class="table align-middle">
+		        	<colgroup>
+			         <col width="5%">
+			         <col width="5%">
+			         <col width="15%">
+			         <col width="30%">
+			         <col width="15%">
+			         <col width="15%">
+			         <col width="15%">
+			       </colgroup>
+					        	
+				  <thead>
+				    <tr>
+				      <th scope="col">No.</th>
+				      <th scope="col" colspan="3">상품정보</th>
+				      <th scope="col">가격</th>
+				      <th scope="col">수량</th>
+				      <th scope="col">총가격</th>
+				    </tr>
+				  </thead>
+				  <!-- 쿼리 하나로 했을 때는 th:each ="buyDetail : ${buy.buyDetailList}"-->
+				  <tbody>
+				  	<th:block th:each="buy : ${buyHistory}">
+				  		<th:block th:if="${buy.buyCode eq list.buyCode}">
+				  			<tr>
+						      <th scope="row" th:text="${buyStat.count}"></th>
+						      <td><img th:src="|@{/image/}${buy.itemInfo.imgList[0].attachedName}|" width="100px" height="100px"></td>
+						      <td>[<span th:text="${buy.itemInfo.cateInfo.cateName}"></span>]</td> 
+						      <td th:text="${buy.itemInfo.itemName}">이름</td>
+						      <td th:text="${#numbers.formatCurrency(buy.itemInfo.itemPrice)}">가격</td>
+						      <td th:text="${buy.buyAmount}">수량</td>
+						    	<td th:text="${#numbers.formatCurrency(buy.buyPrice)}">총금액</td>
+						    </tr> 
+				  		</th:block>
+				  	</th:block>
+				 
+				  </tbody>
+				</table>
+			
+		      </div>
+		    </div>
+		  </div>
+		 </div>
+	 </th:block> 
+		 
+	  </div>
+	</div>
+</div>
+
+</body>
+</html>

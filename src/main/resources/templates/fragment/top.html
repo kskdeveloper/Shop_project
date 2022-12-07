@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultrap.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="top">
+
+	<div class="row" id="top">
+		
+		<input type="hidden" id="isLoginFail" th:value="${isLoginFail}">
+		
+		<th:block sec:authorize="isAnonymous()">
+		
+			<div class="col text-end">
+				<span data-bs-toggle="modal" data-bs-target="#join_modal">JOIN</span> 
+					<span data-bs-toggle="modal" data-bs-target="#login_modal">LOGIN</span>
+			</div>
+
+		</th:block>
+		
+		<th:block sec:authorize="isAuthenticated()">
+			<div class="col text-end">
+				<span sec:authentication="name"></span>님 환영합니다.
+				<a th:href="@{/cart/cartList}">MyPage</a>
+				<a th:href="@{/logout}">LOGOUT</a>
+			</div>
+		</th:block>
+	
+	</div>
+
+	<div class="row" id="shop">
+		<div class="col text-center">
+			
+			<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+			<div>
+				<a th:href="@{/admin/main}">S H O P	</a>
+			</div>
+			</th:block>
+			<th:block sec:authorize="hasRole('ROLE_MEMBER') or isAnonymous()" >
+				<a th:href="@{/item/list}">S H O P	</a>
+			</th:block>		
+		
+		</div>
+	</div>
+	
+<!-- <div sec:authorize="hasRole('ROLE_MEMBER')"> -->
+	<div class="row" style="margin-bottom: 30px; font-size: 22px;">
+		<div class="col">
+			<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+				<div class="container-fluid">
+					<a class="navbar-brand" th:href="@{/item/list}">전체상품보기</a>
+					<button class="navbar-toggler" type="button"
+						data-bs-toggle="collapse" data-bs-target="#navbarNav"
+						aria-controls="navbarNav" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse">
+						<ul class="navbar-nav" >
+						<th:block th:each="statusList : ${statusList}">
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="#" 
+								th:text="${statusList.cateName}"></a>
+							</li>
+						</th:block>
+						
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+<!-- </div> -->
+
+
+	<!-- login 버튼 클릭 시 실행되는 모달  -->
+	<!-- Modal -->
+	<div class="modal fade" id="login_modal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<form action="/member/login" method="post">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">LOGIN</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+
+					<div class="modal-body">
+						<label for="memberId" class="form-label">ID</label> 
+						<input class="form-control" type="text" placeholder="아이디를 입력하세요"
+							aria-label="default input example" name="memberId" id="memberId"> 
+						<label for="memberPw" class="form-label">PW</label> 
+						<input class="form-control" type="password" placeholder="비밀번호를 입력하세요"
+							aria-label="default input example" name="memberPw" id="memberPw">
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">close</button>
+						<button type="submit" class="btn btn-primary" >login</button>
+						<button type="button" class="btn btn-primary" th:onclick='login();'>ajaxLogin</button>
+						<!-- submit은 ajax에서 사용하지 않음 -->
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- join 버튼 클릭 시 실행되는 모달-->
+	<div class="modal fade" id="join_modal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">JOIN</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body">
+
+					<form action="/member/join" class="row g-3" method="post">
+
+						<div class="col-12">
+							<label for="memberId" class="form-label">ID</label> <input
+								type="text" class="form-control" placeholder="아이디를 입력하세요"
+								aria-label="name" id="memberId" name="memberId">
+						</div>
+						<div class="col-12">
+							<label for="memberPw" class="form-label">PW</label> 
+							<input type="password" class="form-control" placeholder="비밀번호를 입력하세요"
+								aria-label="name" id="memberPw" name="memberPw">
+						</div>
+						<div class="col-12">
+							<label for="memberName" class="form-label">NAME</label> <input
+								type="text" class="form-control" placeholder="이름을 입력하세요"
+								aria-label="name" id="memberName" name="memberName">
+						</div>
+
+						<div class="col-12">
+							<label for="memberEmail" class="form-label">Email</label> <input
+								type="email" class="form-control" placeholder="이메일을 입력하세요"
+								id="memberEmail" name="memberEmail">
+						</div>
+
+
+						<div class="col-12">
+							<label for="memberAddr" class="form-label">Address</label>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" name="memberAddr"
+									placeholder="주소를 입력하세요" aria-label="Recipient's username"
+									aria-describedby="button-addon2" id="memberAddr" readonly
+									onclick="searchAddr();">
+								<!-- 주소 키보드로 작성 방지 및 데이터 넘기기 readonly -->
+								<!-- disabled -> 데이터 넘기기 불가  -->
+								<button class="btn btn-secondary" type="button"
+									onclick="searchAddr();">주소검색</button>
+							</div>
+
+							<div class="col-12">
+								<input type="text" class="form-control" id="addrDetail"
+									placeholder="상세주소를 입력하세요" name="addrDetail">
+							</div>
+						</div>
+
+						<div class="col-12 d-grid gap-2">
+							<input type="submit" class="btn btn-primary" value="Sign in">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
+	<!-- <script type="text/javascript" src="/js/layout/top.js"></script> -->
+	<!-- static은 주소 작성 시 /부터 시작-->
+	<script type="text/javascript" th:src="@{/js/layout/top.js}"></script>
+	<!-- thymeleaf 사용 시-->
+
+	<!-- 일반과 타임리프 차이점
+	타임리프가 사용된 html파일은 디자이너분께서 확인 했을 때(서로 사용하는 프로그램 달라도)
+	즉 데이터가 없으면 안불러오면 되는거니까 전체 틀 확인하도록 할 수 있다. 
+	그 전꺼는 내가 주석처리해서 파일 보내줘야 하니까 번거로움 
+
+   -->
+
+</div>
+
+</html>

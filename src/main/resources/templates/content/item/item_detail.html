@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"   
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   layout:decorate="~{layout/base_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+		<div class="row justify-content-center">
+			<div class="col-9 ms-4">
+				<div class="row g-3 ms-3">
+					<div class="col-6">
+					 <th:block th:each="img : ${item.imgList}">
+					 	<th:block th:if="${img.isMain eq 'Y'}">
+						 	<img th:src="|@{/image/}${img.attachedName}|" width="280px" height="380px">
+					 	</th:block> 
+					 </th:block>
+						
+					</div>
+
+					<div class="col-6 mt-5">
+
+							<div class="row g-4">
+								<div>
+									카테고리   [ <span th:text="${item.getCateInfo().getCateName()}"></span> ]
+									<!-- 카테고리 <span th:text="${item.cateInfo.cateName}"></span> -->
+								</div>
+
+								<div>
+									상품명 : <span th:text="${item.itemName}"></span>
+
+								</div>
+
+								<div>
+									가격 : <span th:text="${#numbers.formatCurrency(item.itemPrice)}" id="itemPriceSpan" th:data-item-price ="${item.itemPrice}"></span> won
+								</div>
+									
+								<!-- <form th:action="@{/cart/regCart}" method="post" id="regCartForm"> -->
+									<div>
+										수량 : <input type="number" min="1" value="1" name="cartAmount" id="cartAmount">
+									<!-- 아이템코드 -->	<input type="hidden" name="itemCode" th:value="${item.itemCode}" id="itemCode">
+									</div>
+								<!-- </form> -->
+
+								<div>
+									총 가격 : <span th:text="${#numbers.formatCurrency(item.itemPrice)}" id="totalPriceSpan"></span> won
+								</div>
+
+								<div class="row g-4">
+									<div class="col-4 mr-3" > 
+								<form th:action="@{/cart/detailBuy}" method="post" id="buyDetailForm">
+									<input type="hidden" name="itemCode" th:value="${item.itemCode}">
+									<input type="hidden" name="buyAmount" value="" id="buyAmountInput">								
+								</form>
+									<button type="button" class="btn btn-outline-dark" th:onclick="detailBuy();"> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-heart" viewBox="0 0 16 16">
+  									<path d="M8 7.982C9.664 6.309 13.825 9.236 8 13 2.175 9.236 6.336 6.31 8 7.982Z"/>
+ 									<path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5Zm0 1H7.5v3h-6l2.25-3ZM8.5 4V1h3.75l2.25 3h-6ZM15 5v10H1V5h14Z"/>
+									</svg> 구매하기 </button>
+									</div>
+									
+									<div class="col-4" > 									
+									<button type="button" class="btn btn-outline-dark" th:onclick="addCart();"> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-heart" viewBox="0 0 16 16">
+  									<path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5Zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0ZM14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1ZM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+									</svg> 장바구니
+									<!-- visibility:hidden: 눈에는 보이지 않는데 공간은 유지 layout 영향 준다(해석된다는 뜻) -->
+									<!-- display:none : 없는 태그 취급, layout 해석 영향 주지 않는다 -->
+										<div id="test" style="display: none;">
+											<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
+	    									  1
+	   										</div>
+										</div>
+									 </button>			
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+
+				<div class="row g-4 mt-4 mb-4">
+				  <div class="col mb-4">
+				  
+				  	<div class="card">
+						 
+						  <div class="card-body">
+						    <blockquote class="blockquote mb-0">
+						      <p th:text="${item.itemName}"></p>
+						      <footer class="blockquote-footer">
+						      <span th:text="${item.itemComment}"></span>
+						       <cite title="Source Title"></cite></footer>
+						    </blockquote>
+						  </div>
+						</div>
+					
+				  </div>
+				  
+				  <div class="col" style="margin: 0 auto;">
+				  <th:block th:each="img : ${item.imgList}">
+				  	<th:block th:if="${img.isMain eq 'N'}">
+					  	<img th:src="|@{/image/}${img.attachedName}|">
+				  	</th:block>
+				  </th:block>
+				  	
+				  </div>
+				  
+				</div>
+
+			</div>
+		</div>
+		
+	<!-- 장바구니로 이동 시 모달창  -->
+<div class="modal fade" id="regCartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      	<div class="row mb-3" >
+	      	<div class="col text-center">
+	      		<div>장바구니에 담겼습니다.</div>
+	      		<div>장바구니로 이동하시겠습니까?</div> 
+	      	</div>
+      	</div>
+     
+       <div class="row">
+       	<div class="col text-center">
+       		<button type="button" class="btn btn-primary btn-sm" th:onclick="|location.href='@{/cart/cartList}'|"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;">확인</button>
+       		
+       		<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+       		style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; --bs-btn-font-size: 1rem;">취소</button>
+       	</div>
+       </div>
+     
+      </div>
+    </div>
+  </div>
+</div>	
+
+	<script type="text/javascript" th:src="@{/js/cart/shopCart.js}"></script>
+	</div>
+
+
+</body>
+</html>

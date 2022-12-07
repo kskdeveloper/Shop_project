@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="memberMapper">
+
+<resultMap type="kh.study.shop.member.vo.MemberVO" id="member">
+<id column="MEMBER_ID" property="memberId"/>
+<result column="MEMBER_PW" property="memberPw"/>
+<result column="MEMBER_NAME" property="memberName"/>
+<result column="MEMBER_ADDR" property="memberAddr"/>
+<result column="ADDR_DETAIL" property="addrDetail"/>
+<result column="MEMBER_EMAIL" property="memberEmail"/>
+<result column="MEMBER_ROLE" property="memberRole"/>
+<result column="MEMBER_STATUS" property="memberStatus"/>
+
+</resultMap>
+
+<!-- 회원가입 -->
+<insert id="joinMember">
+	INSERT INTO SHOP_MEMBER(
+		MEMBER_ID
+		, MEMBER_PW
+		, MEMBER_NAME
+		, MEMBER_ADDR
+		, ADDR_DETAIL
+		, MEMBER_EMAIL
+		, MEMBER_STATUS
+		, MEMBER_ROLE
+		)VALUES(
+		#{memberId}
+		, #{memberPw}
+		, #{memberName}
+		, #{memberAddr}
+		, #{addrDetail}
+		, #{memberEmail}
+		, #{memberStatus}
+		, #{memberRole}
+	)
+</insert>
+
+ <!-- 로그인 -->
+<select id="loginMember" resultMap="member">
+SELECT MEMBER_ID
+	, MEMBER_PW
+	, MEMBER_ROLE
+FROM SHOP_MEMBER
+WHERE MEMBER_ID = #{memberId}
+	
+</select>
+
+<!-- 회원list  -->
+<select id="memberList" resultMap="member">
+SELECT MEMBER_ID
+	 , MEMBER_NAME
+	 , 	DECODE(MEMBER_ROLE, 'MEMBER', '일반회원', '관리자') AS MEMBER_ROLE
+FROM SHOP_MEMBER
+ORDER BY MEMBER_NAME 
+
+</select>
+
+<!-- 회원 상세조회 -->
+<select id="memberDetail" resultMap="member">
+
+SELECT MEMBER_ID
+	 , MEMBER_NAME
+	 , MEMBER_ADDR||' '|| ADDR_DETAIL AS MEMBER_ADDR
+	 , MEMBER_EMAIL
+	 , DECODE(MEMBER_ROLE, 'MEMBER', '일반회원','관리자')AS MEMBER_ROLE
+	 , DECODE(MEMBER_STATUS, 'ACTIVE', '활동중','휴면계정') AS MEMBER_STATUS
+FROM SHOP_MEMBER
+WHERE MEMBER_ID = #{memberId}
+
+</select>
+
+</mapper>

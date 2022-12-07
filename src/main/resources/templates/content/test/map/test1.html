@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<table>
+		<tr>
+			<td>key</td>
+			<td>value</td>
+		</tr>
+	
+		<tr th:each="data:${mapData}">
+			<td th:text="${data.key}"></td>
+			<td th:text="${data.value}"></td>
+		</tr>
+	
+	</table>
+	
+	 <br>
+   키가 2인 밸류 : <span th:text="${mapData[2]}"></span>
+	
+
+
+</body>
+</html>

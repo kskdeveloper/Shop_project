@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout ="http://www.ultrap.net.nz/thymeleaf/layout"	
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/admin_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+			<div class="col-6 ">
+				<div class="row g-3">
+					<div class="col-12 mb-3">
+
+						<div class="col-12 mb-3">
+							<H4>카테고리 등록</H4>
+						</div>
+						<div class="col">
+
+							<form class="d-flex" th:action="@{/admin/regCate}" method="post">
+								<div class="col-9">
+									<input class="form-control" type="text" name="cateName">
+								</div>
+								<div class="col ms-3">
+									<button class="btn btn-outline-success" type="submit">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+											fill="currentColor" class="bi bi-cart-plus"
+											viewBox="0 0 16 16">
+  								<path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
+  								<path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+									</svg>	등록 </button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+
+					<div class="col-12">
+						<H4>카테고리 목록</H4>
+					</div>
+					<div class="col-12">
+						<table class="table table-striped table-hover text-center">
+							<thead>
+								<tr>
+									<th scope="col">No.</th>
+									<td>CATE_CODE</td>
+									<td>CATE_NAME</td>
+									<td>사용여부</td>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:if="${#lists.size(cateList) == 0}">
+									<tr>
+										<td colspan="4">등록된 카테고리가 없습니다.</td>
+									</tr>
+								</th:block>
+
+								<th:block th:if="${!(#lists.size(cateList) eq 0)}">
+									<tr th:each="cateList, status : ${cateList}">
+										<th scope="col" th:text="${status.count}"></th>
+										<td th:text="${cateList.cateCode}"></td>
+										<td th:text="${cateList.cateName}"></td>
+										<td><input type="radio" value="USE" th:name="|cateStatus_${status.count}|" 
+										th:checked="${cateList.cateStatus eq'USE'}" th:onclick="changeStatus([[${cateList.cateCode}]], 'USE');" > 사용 
+											<input type="radio" value="UNUSE" th:name="|cateStatus_${status.count}|" 
+											th:checked="${cateList.cateStatus eq'UNUSE'}" th:onclick="changeStatus([[${cateList.cateCode}]], 'UNUSE');"> 미사용
+										</td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<div class="col-5 ms-4">
+		<div class="row g-3">
+		<h4>상품등록</h4>
+		
+		<form th:action="@{/admin/regItem}" method="post" enctype="multipart/form-data">
+		
+		<div class="col-12 mb-3">
+			<div class="row ">
+			  
+			  <div class="col mb-3">
+			  상품 이름
+			    <input type="text" class="form-control" placeholder="item_name" name="itemName">
+			  </div>
+			</div>
+			<div class="row g-3">
+			  <div class="col-6 mb-3">
+			  상품 재고
+			    <input type="number" class="form-control" placeholder="item_stock" min="1" name="itemStock">
+			  </div>
+			  <div class="col-6">
+			  상품가격
+			    <input type="text" class="form-control" placeholder="item_price" name="itemPrice">
+			  </div>
+			</div>
+			<div class="row g-3">
+			<div class="col-12 mb-3">
+			카테코드
+			<select class="form-select" name="cateCode" id="cateCode">
+				<option selected>전체</option>
+				<th:block th:each="statusList : ${statusList}"> 
+					  <option th:text ="${statusList.cateName}" th:value="${statusList.cateCode}"></option>
+				</th:block>
+			</select>
+			</div>
+			</div>
+			<div class="row g-3">
+				<div class="col-12 mb-3">
+				Main IMG				<!-- 파일 여러개 선택 가능 multiple -->
+				<input type="file" class="form-control" name="mainImg">
+				</div>
+			</div>
+			<div class="row g-3">
+				<div class="col-12 mb-3">
+				Sub IMG
+			<input type="file" class="form-control" name="subImgs" multiple>
+			
+			</div>
+			</div> 
+			
+			<div class="row g-3">
+				<div class="col-12">
+				상품 코맨트
+				 <textarea class="form-control" rows="3" name="itemComment">
+				 </textarea>
+				</div>
+			</div>
+				
+			<div class="row g-3" style="margin: 0 auto; text-align: center;">
+				<div class="col-12">
+					<button class="btn btn-outline-success" type="submit">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+						fill="currentColor" class="bi bi-cart-plus"
+						viewBox="0 0 16 16">
+  					<path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
+  					<path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+					</svg>	등록 </button>
+				</div>
+			</div>
+				
+				
+			</div>
+		</form>
+				</div>
+			</div>
+		</div>
+	
+	<script type="text/javascript" th:src="@{/js/admin/reg_item.js}"></script> <!-- fragment 끝나기 전에 넣기 -->
+	</div>
+
+</body>
+</html>

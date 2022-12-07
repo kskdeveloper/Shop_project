@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<table>
+		<tr>
+			<td>Key</td>
+			<td>회원아이디</td>
+			<td>회원이름</td>
+		</tr>
+	
+		<tr th:each="data:${mapData}">
+			<td th:text="${data.key}"></td>
+			<td th:text="${data.value.memberId}"></td>
+			<td th:text="${data.value.memberName}"></td>
+			
+		</tr>
+	
+	</table>
+	
+
+
+</body>
+</html>
