@@ -83,16 +83,16 @@
                   </div>
                </td>
                <td class="searchTitle">상태</td>
-               <td colspan="2">
+               <td colspan="2" style="padding-left: 0px;padding-right: 0px;">
                   <div class="form-check form-check-inline">			<!-- null값이거나 빈값이거나 -->
                     <input class="form-check-input" type="radio" name="itemStatus" id="" value="" th:checked="${paramMap['itemStatus'] == null or paramMap['itemStatus'] eq ''}">
                     <label class="form-check-label" for="" >전체</label>
                   </div>
-                     <div class="form-check form-check-inline">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="itemStatus" id="" value="ON_SALE" th:checked="${paramMap['itemStatus'] eq 'ON_SALE'}">
                     <label class="form-check-label" for="">판매중</label>
                   </div>
-                     <div class="form-check form-check-inline">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="itemStatus" id="" value="SOLD_OUT" th:checked="${paramMap['itemStatus'] eq 'SOLD_OUT'}" >
                     <label class="form-check-label" for="">매진</label>
                   </div>
@@ -103,7 +103,7 @@
       </div>
        <div class="row" style="margin-top: 2rem;">
        <div class="col" style="font: 10px;">
-       	<div>총 <span th:text="${#lists.size(itemList)}"></span>개의 상품이 검색되었습니다. </div>
+       	<div>총 <span th:text="${#lists.size(itemList)}"  style="color:blue;"></span>개의 상품이 검색되었습니다. </div>
        </div>
        
        </div>
