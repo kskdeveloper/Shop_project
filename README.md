@@ -16,5 +16,5 @@
 
 <a href="https://github.com/yun-developer" target="_blank"><img src="https://img.shields.io/badge/Bang-EA4AAA?style=for-the-badge&logo=GitHub Sponsors&logoColor=yellow"/></a>
 
-<a href="https://github.com/yun-developer" target="_blank"><img src="https://img.shields.io/badge/Bang-EA4AAA?style=for-the-badge&logo=GitHub Sponsors&logoColor=yellow"/></a>
-<a href="https://github.com/bb0oo" target="_blank"><img src="https://img.shields.io/badge/Bang-EA4AAA?style=for-the-badge&logo=GitHub Sponsors&logoColor=yellow"/></a>
+<a href="https://github.com/kskdeveloper" target="_blank"><img src="https://img.shields.io/badge/Bang-EA4AAA?style=for-the-badge&logo=GitHub Sponsors&logoColor=yellow"/></a>
+<a href="https://github.com/kskdeveloper" target="_blank"><img src="https://img.shields.io/badge/Bang-EA4AAA?style=for-the-badge&logo=GitHub Sponsors&logoColor=yellow"/></a>
