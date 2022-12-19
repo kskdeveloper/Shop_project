@@ -1,15 +1,4 @@
-<p dir="auto">
-   <img src="https://camo.githubusercontent.com/d96568e89d5005cb460310109baa792f2ade13f990a5a4303d1fee9ece7cf349/68747470733a2f2f63617073756c652d72656e6465722e76657263656c2e6170702f6170693f747970653d576176696e6726636f6c6f723d303a4646463843312c35303a4646424433352c3130303a454339343534266865696768743d3136302673656374696f6e3d68656164657226746578743d57656c636f6d652126666f6e7453697a653d323526666f6e74436f6c6f723d6666666666662626666f6e74416c69676e593d333526616e696d6174696f6e3d7477696e6b6c696e67" alt="header" data-canonical-src="https://capsule-render.vercel.app/api?type=Waving&amp;color=0:FFF8C1,50:FFBD35,100:EC9454&amp;height=160&amp;section=header&amp;text=Welcome!&amp;fontSize=25&amp;fontColor=ffffff&amp;&amp;fontAlignY=35&amp;animation=twinkling" style="max-width: 100%;">
-</p>
 
-### Hi there 👋
-
-<!--
-**kskdeveloper/kskdeveloper** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-@@ -1,4 +1,18 @@
-### Hi there 👋
-# Skills ✨
 ## Platforms & Languages
 ![Java](https://img.shields.io/badge/Java-007396.svg?&style=for-the-bdge&logo=Java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-bdge&logo=Java&logoColor=white)
@@ -29,3 +18,23 @@
 <!--<img src="http://mazassumnida.wtf/api/v2/generate_badge?boj=bbb999" align="left" style="width: 100%" />-->
 <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kskdeveloper&hide_border=true&layout=compact&theme=flag-india" align="left" style="width: 98%" />
 </td></tr></table>
+
+
+<p dir="auto">
+   <em>
+      <g-emoji class="g-emoji" alias="handshake" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f91d.png">🤝</g-emoji> Get in touch
+   </em>
+</p>
+<p align="right" dir="auto">
+  <a href="mailto: sukyung5555@gmail.com" alt="gmail">
+    <img src="https://camo.githubusercontent.com/c6f99830ac89d3ad9d1c09bbd6b78ef6cda3b73d9b9d4c6af3f06670a954b750/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d476d61696c2d4431343833363f6c6f676f3d476d61696c266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Gmail-D14836?logo=Gmail&amp;logoColor=white" style="max-width: 100%;">
+  </a>
+  <a href="https://godseanggo.tistory.com/" alt="kskdeveloper.log" rel="nofollow">
+    <img src="https://camo.githubusercontent.com/c8048764b3e1a538000229dc23d478e2eb5db5106d35d9dddb06196e48719a64/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d56656c6f672d3230633939373f6c6f676f3d56696d656f266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-TSTORY-20c997?logo=Vimeo&amp;logoColor=white" style="max-width: 100%;">
+  </a>
+   
+   
+  <a href="https://cute-sundae-9e5.notion.site/2cc66dad89e34739b817a359f1d87a42?v=015e73ec80e04e5e9b9ae1281f686ef7" alt="resume" rel="nofollow">
+    <img src="https://camo.githubusercontent.com/673d74ca18cee3d05c1bd5e358266f9420e8c85e7d6c6b21e58b852c0302e6eb/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d506f7274666f6c696f2d3030303030303f6c6f676f3d4e6f74696f6e266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Portfolio-000000?logo=Notion&amp;logoColor=white" style="max-width: 100%;">
+  </a>
+</p>
